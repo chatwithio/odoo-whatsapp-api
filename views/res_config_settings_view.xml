@@ -45,6 +45,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-6 o_setting_box" id="whatsapp_3" >
+                <div class="o_setting_left_pane">
+                    <field name="developer_mode"/>
+                </div>
+                <div class="o_setting_right_pane">
+                    <label for="developer_mode"/>
+                    <div class="text-muted">
+                        Activate Developer Mode: Changes url to Sandbox
+                    </div>
+                </div>
+            </div>
         </xpath>
     </field>
   </record>

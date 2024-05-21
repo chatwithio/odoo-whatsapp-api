@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 import re
+from odoo.exceptions import ValidationError
 
 class MailComposeMessageWAValue(models.TransientModel):
     _name = 'mail.compose.message.wa.value'
@@ -41,6 +42,8 @@ class MailComposeMessage(models.TransientModel):
             res = False
             if record.whatsapp:
                 config = self.env['wa.message.model.adaptation'].search([('model_id.model', '=', self.model)])
+                if not config:
+                    raise ValidationError(_("There is no model adaptation config for ") + self._name)
                 if config:
                     res = config[0].get_phone_number(res_id=self.res_id)
             record.whatsapp_number = res

@@ -8,6 +8,7 @@
             <tree string="WhatsApp Messages" sample="1" >
                 <field name="create_date" optional="show"/>
                 <field name="create_uid" optional="show"/>
+                <field name="dialog_message_id" optional="show"/>
                 <field name="res_model" optional="show"/>
                 <field name="res_id" optional="show"/>
                 <field name="status_code" optional="show"/>
@@ -46,10 +47,29 @@
         <field name="state">code</field>
         <field name="code">model.send_message_template()</field>
     </record>
+    <record id="action_messaging_health_status" model="ir.actions.server">
+        <field name="name">Messaging Health Status</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_wa_message" />
+        <field name="state">code</field>
+        <field name="code">model.messaging_health_status()</field>
+    </record>
+
+    <record id="action_wa_configuration" model="ir.actions.act_window">
+        <field name="name">Connection Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'whatsapp', 'bin_size': False}</field>
+    </record>
+
     <menuitem id='menu_whatsapp' name='WhatsApp' sequence="100"/>
     <menuitem id='menu_whatsapp_messages' name='Messages' sequence="1" parent="menu_whatsapp" action="whatsapp_messages"/>
     <menuitem id='menu_whatsapp_conf' name='Configuration' sequence="100" parent="menu_whatsapp"/>
+    <menuitem id='menu_wa_conf' name='Connection Settings' sequence="1" action="action_wa_configuration" parent="menu_whatsapp_conf"/>
     <menuitem id='menu_webhook' name='Set Webhook' sequence="100" action="action_make_config_webhook" parent="menu_whatsapp_conf"/>
+    <menuitem id='menu_test_health' name='Test Health' sequence="100" action="action_messaging_health_status" parent="menu_whatsapp_conf"/>
    <!-- <menuitem id='menu_testing' name='Testing' sequence="100" action="action_make_testing"/>
     <menuitem id='menu_template_testing' name='template' sequence="100" action="action_make_testing_template"/>-->
 </odoo>

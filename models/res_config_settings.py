@@ -23,6 +23,10 @@ class ResConfigSettings(models.TransientModel):
         related='company_id.webhook_url',
         readonly=False,
     )
+    developer_mode = fields.Boolean(
+        related='company_id.developer_mode',
+        readonly=False,
+    )
 
 
 class Company(models.Model):
@@ -36,5 +40,8 @@ class Company(models.Model):
     )
     webhook_url = fields.Char(
         string="360 NameSpace",
+    )
+    developer_mode = fields.Boolean(
+        string="Developer Mode",
     )
 

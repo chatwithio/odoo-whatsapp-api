@@ -57,6 +57,7 @@ class WaMessageQueue(models.Model):
             'dialog_api_key': company.dialog_api_key,
             'dialog_namespace': company.dialog_namespace,
             'webhook_url': company.webhook_url,
+            'developer_mode': company.developer_mode,
         }
 
     def log_note(self, message_content):
@@ -66,8 +67,11 @@ class WaMessageQueue(models.Model):
             response = json.loads(self.json_response)
             payload = json.loads(self.json_payload)
             txt += payload['to'] + "<br/>"
-            if self.status_code == "200":
-                txt += " Status: OK"
+            if self.status_code == "200" or self.status_code == "201":
+                if self.status_code == "200":
+                    txt += " Status: OK"
+                else:
+                    txt += " Status: SENT"
                 txt += "<br/> Content: " + message_content
             else:
                 if 'error' in response.keys():
@@ -83,6 +87,8 @@ class WaMessageQueue(models.Model):
                     error = "Error indefinido. Contactar Admin"
                 txt += " ERROR: " + error
                 config = self.env['wa.message.model.adaptation'].search([('model_id.model', '=', self.res_model)])
+                if not config:
+                    raise ValidationError(_("There is no model adaptation config for ") + self._name)
                 user = rec[config.activity_user_field_id.name]
                 if not user:
                     user = config.activity_default_user_id
@@ -90,10 +96,15 @@ class WaMessageQueue(models.Model):
                     user = self.env.user
                 rec.activity_schedule('odoo-whatsapp-api.message_error_activity', user_id=user.id, note=error, date_deadline=fields.Date.today())
             rec.message_post(body=txt)
+
     def config_testing_webhook(self):
-        url = "https://waba-sandbox.360dialog.io/v1/configs/webhook"
         config = self.get_config()
-        payload = {"url": config['webhook_url']}
+        developer_mode = config['developer_mode']
+        if developer_mode:
+            url = "https://waba-sandbox.360dialog.io/v1/configs/webhook"
+        else:
+            url = "https://waba.360dialog.io/v1/configs/webhook"
+        payload = {"url": config['webhook_url'] + "/whatsapp/webhook"}
         headers = {
             'D360-Api-Key': config['dialog_api_key'],
             'Content-Type': "application/json",
@@ -102,12 +113,32 @@ class WaMessageQueue(models.Model):
         print(response.status_code)
         print(response.json())
 
+    def messaging_health_status(self):
+        config = self.get_config()
+        developer_mode = config['developer_mode']
+        if developer_mode:
+            url = "https://waba.360dialog.io/v1/health_status"
+        else:
+            url = "https://waba.360dialog.io/v1/health_status"
+        headers = {
+            'D360-Api-Key': config['dialog_api_key'],
+            'Content-Type': "application/json",
+        }
+        response = requests.get(url, headers=headers)
+        print(response.status_code)
+        print(response.json())
+
     def send_message(self, res_id, res_model, phone_number, text):
         config = self.get_config()
-        url = "https://waba-sandbox.360dialog.io/v1/messages"
+        developer_mode = config['developer_mode']
+        if developer_mode:
+            url = "https://waba-sandbox.360dialog.io/v1/messages"
+        else:
+            url = "https://waba.360dialog.io/v1/messages"
         # Create the payload with the injected phone number and text
         payload = {
             "to": phone_number,
+            "recipient_type": "individual",
             "type": "text",
             "messaging_product": "whatsapp",
             "text": {
@@ -115,18 +146,21 @@ class WaMessageQueue(models.Model):
             }
         }
         headers = {
-            'D360-Api-Key': config['dialog_api_key'],
+            'D360-API-KEY': config['dialog_api_key'],
             'Content-Type': "application/json",
         }
         # Convert the payload dictionary to a JSON string
         payload_json = json.dumps(payload)
         # Send the POST request with the payload and headers
-        response = requests.post(url, data=payload_json, headers=headers)
+        response = requests.post(url, json=payload, headers=headers)
+        dialog_message = False
+        if 'messages' in response.json().keys():
+            dialog_message = response.json()['messages'][0]['id']
         message_vals = {
             'res_id': res_id,
             'res_model': res_model,
             'status_code': response.status_code,
-            'dialog_message_id': "",
+            'dialog_message_id': dialog_message,
             'json_payload': payload_json,
             'json_response': json.dumps(response.json()),
             'company_id': self.env.user.company_id.id
@@ -136,7 +170,11 @@ class WaMessageQueue(models.Model):
 
     def send_message_template(self, res_id, res_model, phone_number, template_id):
         config = self.get_config()
-        url = "https://waba-sandbox.360dialog.io/v1/messages"
+        developer_mode = config['developer_mode']
+        if developer_mode:
+            url = "https://waba-sandbox.360dialog.io/v1/messages"
+        else:
+            url = "https://waba.360dialog.io/v1/messages"
         active_rec = self.env[res_model].browse(res_id)
         parameters = []
         for param in template_id.get_params_values(res_id):
@@ -150,7 +188,7 @@ class WaMessageQueue(models.Model):
                 "messaging_product": "whatsapp",
                 "template": {
                     "namespace": config['dialog_namespace'],
-                    "language":  {"code": "en"},
+                    "language":  {"code": template_id.lang_code or "en", "policy": "deterministic"},
                     "name": template_id.dialog_reference,
                     "components": [{
                             "type": "body",
@@ -164,13 +202,15 @@ class WaMessageQueue(models.Model):
             'D360-Api-Key': config['dialog_api_key'],
             'Content-Type': "application/json",
         }
-
-        response = requests.post(url, data=payload_json, headers=headers)
+        response = requests.post(url, json=payload, headers=headers)
+        dialog_message = False
+        if 'messages' in response.json().keys():
+            dialog_message = response.json()['messages'][0]['id']
         message_vals = {
             'res_id': res_id,
             'res_model': res_model,
             'status_code': response.status_code,
-            'dialog_message_id': "",
+            'dialog_message_id': dialog_message,
             'json_payload': payload_json,
             'json_response': json.dumps(response.json()),
             'company_id': self.env.user.company_id.id,

@@ -12,6 +12,7 @@ class WaMessageTemplate(models.Model):
     params_ids = fields.One2many('wa.message.template.params', 'template_id')
     model_id = fields.Many2one('ir.model')
     model_name = fields.Char(related="model_id.name")
+    lang_code = fields.Char()
 
     def get_params_values(self, res_id=False):
         res = []
