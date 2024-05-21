@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wa_message,access.wa.message,model_wa_message,base.group_user,1,1,1,1
+access_wa_message_template,access.wa_message_template,model_wa_message_template,base.group_user,1,1,1,1
+access_wa_message_template_params,access.wa_message_template_params,model_wa_message_template_params,base.group_user,1,1,1,1
+access_wa_message_model_adaptation,access.wa_message_model_adaptation,model_wa_message_model_adaptation,base.group_user,1,1,1,1
+access_mail_compose_message_wa_value,access.mail_compose_message_wa_value,model_mail_compose_message_wa_value,base.group_user,1,1,1,1
+
+
+

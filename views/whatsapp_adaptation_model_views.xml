@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="whatsapp_model_adaptation_conf_form_view" model="ir.ui.view">
+        <field name="name">whatsapp_model_adaptation_conf_form_view</field>
+        <field name="model">wa.message.model.adaptation</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="WhatsApp Model Adaptations" sample="1" >
+                <group>
+                    <group>
+                        <field name="model_id"/>
+                        <field name="model_name"/>
+                    </group>
+                    <group>
+                        <field name="activity_user_field_id" domain="[('model_id','=',model_id),('relation','=','res.users')]"/>
+                        <field name="activity_default_user_id" />
+                        <field name="phone_field_ids" widget="many2many_tags" domain="[('model_id','=',model_id),'|',('ttype','=','char'),('relation','=','res.partner')]"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="whatsapp_model_adaptation_conf_tree_view" model="ir.ui.view">
+        <field name="name">whatsapp_model_adaptation_conf_tree_view</field>
+        <field name="model">wa.message.model.adaptation</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="WhatsApp Model Adaptations" sample="1" >
+                <field name="model_id" optional="show"/>
+                <field name="model_name" optional="show"/>
+                <field name="activity_user_field_id" optional="show" domain="[('model_id','=',model_id),('relation','=','res.users')]"/>
+                <field name="activity_default_user_id" optional="show" />
+                <field name="phone_field_ids" widget="many2many_tags" optional="show" domain="[('model_id','=',model_id),('ttype','=','char')]"/>
+            </tree>
+        </field>
+    </record>
+    <record id="action_whatsapp_model_adaptation_conf" model="ir.actions.act_window">
+        <field name="name">WhatsApp Model Adaptations</field>
+        <field name="res_model">wa.message.model.adaptation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data yet !
+            </p>
+        </field>
+    </record>
+    <menuitem id='menu_wa_model_adaptation_conf' name='Model Adaptations' sequence="100" action="action_whatsapp_model_adaptation_conf" parent="menu_whatsapp_conf"/>
+</odoo>

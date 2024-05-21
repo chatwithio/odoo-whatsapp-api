@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="wa_message_tree_view" model="ir.ui.view">
+        <field name="name">wa.message.tree.view</field>
+        <field name="model">wa.message</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="WhatsApp Messages" sample="1" >
+                <field name="create_date" optional="show"/>
+                <field name="create_uid" optional="show"/>
+                <field name="res_model" optional="show"/>
+                <field name="res_id" optional="show"/>
+                <field name="status_code" optional="show"/>
+                <field name="json_response" optional="show"/>
+            </tree>
+        </field>
+    </record>
+    <record id="whatsapp_messages" model="ir.actions.act_window">
+        <field name="name">WhatsApp Messages</field>
+        <field name="res_model">wa.message</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data yet !
+            </p>
+        </field>
+    </record>
+    <record id="action_make_testing" model="ir.actions.server">
+        <field name="name">Make Testing</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_wa_message" />
+        <field name="state">code</field>
+        <field name="code">model.send_message()</field>
+    </record>
+    <record id="action_make_config_webhook" model="ir.actions.server">
+        <field name="name">Set Up WebHook</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_wa_message" />
+        <field name="state">code</field>
+        <field name="code">model.config_testing_webhook()</field>
+    </record>
+    <record id="action_make_testing_template" model="ir.actions.server">
+        <field name="name">Make Testingss</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_wa_message" />
+        <field name="state">code</field>
+        <field name="code">model.send_message_template()</field>
+    </record>
+    <menuitem id='menu_whatsapp' name='WhatsApp' sequence="100"/>
+    <menuitem id='menu_whatsapp_messages' name='Messages' sequence="1" parent="menu_whatsapp" action="whatsapp_messages"/>
+    <menuitem id='menu_whatsapp_conf' name='Configuration' sequence="100" parent="menu_whatsapp"/>
+    <menuitem id='menu_webhook' name='Set Webhook' sequence="100" action="action_make_config_webhook" parent="menu_whatsapp_conf"/>
+   <!-- <menuitem id='menu_testing' name='Testing' sequence="100" action="action_make_testing"/>
+    <menuitem id='menu_template_testing' name='template' sequence="100" action="action_make_testing_template"/>-->
+</odoo>

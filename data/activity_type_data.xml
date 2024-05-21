@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="message_error_activity" model="mail.activity.type">
+            <field name="name">WhatsApp Message Error</field>
+        </record>
+</odoo>

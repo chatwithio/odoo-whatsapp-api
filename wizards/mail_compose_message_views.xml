@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="email_compose_message_wizard_whatsapp">
+        <field name="name">mail.compose.message.form.whatsapp</field>
+        <field name="model">mail.compose.message</field>
+        <field name="inherit_id" ref="mail.email_compose_message_wizard_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='subject']//.." position="before">
+                <group>
+                    <field name="whatsapp"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='subject']//.." position="after">
+                <group>
+                    <group>
+                        <field name="whatsapp_number" attrs="{'invisible':[('whatsapp','=',False)]}"/>
+                    </group>
+                    <group>
+                        <field name="whatsapp_template_id" attrs="{'invisible':[('whatsapp','=',False)]}"/>
+                    </group>
+                </group>
+                <field name="wa_value_ids" invisible="1" nolabel="1">
+                    <tree create="0" delete="0">
+                        <field name="value"/>
+                    </tree>
+                </field>
+                <field name="custom_wa_text" nolabel="1" attrs="{'invisible':['|',('whatsapp_template_id','!=',False),('whatsapp','=',False)]}"/>
+                <field name="output_wa_text" attrs="{'invisible':[('whatsapp_template_id','=',False)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='subject']//.." position="attributes">
+                <attribute name="attrs">{'invisible': [('whatsapp', '!=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='body']" position="attributes">
+                <attribute name="attrs">{'invisible': [('whatsapp', '!=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='attachment_ids']//.." position="attributes">
+                <attribute name="attrs">{'invisible': [('whatsapp', '!=', False)]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_save_as_template']" position="attributes">
+                <attribute name="attrs">{'invisible': [('whatsapp', '!=', False)]}</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

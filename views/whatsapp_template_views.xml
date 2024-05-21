@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wa_message_template_tree_view" model="ir.ui.view">
+        <field name="name">wa.message.template.tree.view</field>
+        <field name="model">wa.message.template</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="WhatsApp Message Templates" sample="1" >
+                <field name="name" optional="show"/>
+                <field name="dialog_reference" optional="show"/>
+                <field name="model_id" optional="show"/>
+                <field name="content"/>
+            </tree>
+        </field>
+    </record>
+    <record id="wa_message_template_params_form_view" model="ir.ui.view">
+        <field name="name">wa.message.template.params.form.view</field>
+        <field name="model">wa.message.template.params</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml"><form>
+            <sheet>
+                <group>
+                    <group>
+                        <field name="model_id"  />
+                        <field name="model_name" />
+                        <field name="type" />
+                    </group>
+                    <group>
+                        <field name="field_id" domain="[('model_id','=',model_id)]" attrs="{'invisible': [('type','=','custom_text')]}" />
+                        <field name="custom_text" attrs="{'invisible': [('type','!=','custom_text')]}" />
+                        <field name="not_found_content" attrs="{'invisible': [('type','=','custom_text')]}" />
+                    </group>
+                </group>
+            </sheet>
+        </form>
+        </field>
+    </record>
+
+    <record id="wa_message_template_form_view" model="ir.ui.view">
+        <field name="name">wa.message.template.form.view</field>
+        <field name="model">wa.message.template</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml"><form>
+            <sheet>
+                <group>
+                    <group>
+                        <field name = "model_id" options="{'no_create':True,'no_create_and_edit':True,'no_open':True,'no_quick_create':True}"/>
+                        <field name = "content" />
+                    </group>
+                    <group>
+                        <field name = "name" />
+                        <field name = "dialog_reference" />
+                        <field name = "model_name" invisible="True"/>
+                    </group>
+                </group>
+                <field name="params_ids" mode="tree,form" attrs="{'invisible': [ ('model_id', '=', False)]}">
+                    <tree  create = '1' delete = '1'>
+                        <field name="sequence" widget="handle" />
+                        <field name="type"/>
+                        <field name="field_id"/>
+                        <field name="model_name" invisible="1"/>
+                        <field name="custom_text"/>
+                        <field name="not_found_content"/>
+                    </tree>
+                </field>
+            </sheet>
+        </form>
+        </field>
+    </record>
+
+    <record id="whatsapp_message_templates" model="ir.actions.act_window">
+        <field name="name">WhatsApp Message Templates</field>
+        <field name="res_model">wa.message.template</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data yet !
+            </p>
+        </field>
+    </record>
+    <menuitem id='menu_whatsapp_message_template' name='Message Templates' sequence="1" parent="menu_whatsapp_conf" action="whatsapp_message_templates"/>
+</odoo>
