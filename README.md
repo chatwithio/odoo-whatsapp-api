@@ -1,1 +1,1 @@
-# combo_product
+# odoo-whatsapp-api
