@@ -3,6 +3,11 @@ from odoo import fields, models, _
 import requests
 import json
 from odoo.exceptions import ValidationError
+import logging
+
+_logger = logging.getLogger(__name__)
+
+
 
 class WaMessageModelAdaptation(models.Model):
     _name = "wa.message.model.adaptation"
@@ -110,6 +115,7 @@ class WaMessageQueue(models.Model):
             'Content-Type': "application/json",
         }
         response = requests.post(url, data=json.dumps(payload), headers=headers)
+        _logger.info("WhatsApp webhook configured: %s", response.json())
         print(response.status_code)
         print(response.json())
 
