@@ -104,7 +104,7 @@ class WaMessageQueue(models.Model):
             url = "https://waba-sandbox.360dialog.io/v1/configs/webhook"
         else:
             url = "https://waba.360dialog.io/v1/configs/webhook"
-        payload = {"url": config['webhook_url'] + "/whatsapp/webhook"}
+        payload = {"url": config['webhook_url'] + "/api/v1/whatsapp/webhook"}
         headers = {
             'D360-Api-Key': config['dialog_api_key'],
             'Content-Type': "application/json",
