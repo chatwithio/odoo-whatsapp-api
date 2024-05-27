@@ -4,6 +4,7 @@ access_wa_message_template,access.wa_message_template,model_wa_message_template,
 access_wa_message_template_params,access.wa_message_template_params,model_wa_message_template_params,base.group_user,1,1,1,1
 access_wa_message_model_adaptation,access.wa_message_model_adaptation,model_wa_message_model_adaptation,base.group_user,1,1,1,1
 access_mail_compose_message_wa_value,access.mail_compose_message_wa_value,model_mail_compose_message_wa_value,base.group_user,1,1,1,1
+access_wa_webhook_messages,access.wa_webhook_messages,model_wa_webhook_messages,base.group_user,1,1,1,1
 
 
 

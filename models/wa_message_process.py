@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import fields, models, _
+from odoo import fields, models, _, api
 import requests
 import json
 from odoo.exceptions import ValidationError
@@ -7,6 +7,25 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+class WaWebHookMessages(models.Model):
+    _name = 'wa.webhook.messages'
+    _order = "create_date DESC"
+
+    json_content = fields.Char()
+    @api.depends('json_content')
+    def message_process(self):
+        for record in self:
+            payload = json.loads(record.json_content)
+            if "statuses" in payload.keys():
+                for status in payload['statuses']:
+                    message_id = status['id']
+                    status = status['status']
+                    wa_message = self.env['wa.message'].sudo().search([('dialog_message_id', '=', message_id)])
+                    if wa_message:
+                        wa_message[0].status = status
+                        wa_message[0].webhook_message_ids = [(4, record.id)]
+            record.trigger_message_process = False if record.trigger_message_process else True
+    trigger_message_process = fields.Boolean(compute=message_process, store=True)
 
 
 class WaMessageModelAdaptation(models.Model):
@@ -47,14 +66,24 @@ class WaMessageQueue(models.Model):
     _name = "wa.message"
     _order = "create_date DESC"
 
+    message_content = fields.Text()
     res_id = fields.Char()
     res_model = fields.Char()
     status_code = fields.Char()
+    mail_message_id = fields.Many2one('mail.message')
+    status = fields.Selection(selection=[
+        ('in_progress', 'In Progress'),
+        ('sent', 'Sent'),
+        ('delivered', 'Delivered'),
+        ('read', 'Read'),
+        ('failed', 'Failed'),
+    ])
     dialog_message_id = fields.Char()
     json_response = fields.Char()
     json_payload = fields.Char()
     wa_message_template_id = fields.Many2one('wa.message.template')
     company_id = fields.Many2one('res.company')
+    webhook_message_ids = fields.Many2many('wa.webhook.messages')
 
     def get_config(self):
         company = self.env.user.company_id
@@ -65,43 +94,60 @@ class WaMessageQueue(models.Model):
             'developer_mode': company.developer_mode,
         }
 
-    def log_note(self, message_content):
-        active_rec = self.env[self.res_model].browse(int(self.res_id))
+    def schedule_error_activity(self, error_message):
+        if self.res_model and self.res_id:
+            active_rec = self.env[self.res_model].browse(int(self.res_id))
+        config = self.env['wa.message.model.adaptation'].search([('model_id.model', '=', self.res_model)])
+        if not config:
+            raise ValidationError(_("There is no model adaptation config for ") + self._name)
         for rec in active_rec:
-            txt = "WhatsApp Message Sent | "
-            response = json.loads(self.json_response)
-            payload = json.loads(self.json_payload)
-            txt += payload['to'] + "<br/>"
-            if self.status_code == "200" or self.status_code == "201":
-                if self.status_code == "200":
-                    txt += " Status: OK"
+            user = rec[config.activity_user_field_id.name]
+            if not user:
+                user = config.activity_default_user_id
+            if not user:
+                user = self.env.user
+            rec.activity_schedule('odoo-whatsapp-api.message_error_activity', user_id=user.id, note=error_message, date_deadline=fields.Date.today())
+    @api.depends('status')
+    def log_note(self):
+        for record in self:
+            if record.res_model and record.res_id:
+                active_rec = self.env[record.res_model].browse(int(record.res_id))
+            for rec in active_rec:
+                if record.status:
+                    message_text = f"WhatsApp Message {dict(self._fields['status']._description_selection(self.env)).get(record.status)} | "
                 else:
-                    txt += " Status: SENT"
-                txt += "<br/> Content: " + message_content
-            else:
-                if 'error' in response.keys():
-                    error = response['error']
-                    if type(error) != str:
-                        if 'message' in error.keys():
-                            error = error['message']
-                    else:
-                        error = response['error']
-                elif 'meta' in response.keys() and 'developer_message' in response['meta'].keys():
-                    error = response['meta']['developer_message']
+                    message_text = ''
+                response = json.loads(record.json_response)
+                payload = json.loads(record.json_payload)
+                if payload:
+                    message_text += payload['to'] + "<br/>"
+                if record.message_content:
+                    message_text += "<br/> Content: " + record.message_content
+                if record.status == 'failed':
+                    messages_to_process = []
+                    messages_to_process.append(response)
+                    for webhook_message in record.webhook_message_ids:
+                        messages_to_process.append(json.loads(webhook_message.json_content))
+                    error_message = ''
+                    for message in messages_to_process:
+                        if 'statuses' in message.keys():
+                            for status in message['statuses']:
+                                if 'errors' in status.keys():
+                                    for error in status['errors']:
+                                        if 'details' in error.keys():
+                                            error_message += error['details'] + "  ||  "
+                                        elif 'title' in error.keys():
+                                            error_message += error['title'] + "  ||  "
+                                        else:
+                                            error_message += 'Unknown Error. Reach Admin  ||  '
+                    record.schedule_error_activity(error_message)
+                if record.mail_message_id:
+                    record.mail_message_id.body = message_text
                 else:
-                    error = "Error indefinido. Contactar Admin"
-                txt += " ERROR: " + error
-                config = self.env['wa.message.model.adaptation'].search([('model_id.model', '=', self.res_model)])
-                if not config:
-                    raise ValidationError(_("There is no model adaptation config for ") + self._name)
-                user = rec[config.activity_user_field_id.name]
-                if not user:
-                    user = config.activity_default_user_id
-                if not user:
-                    user = self.env.user
-                rec.activity_schedule('odoo-whatsapp-api.message_error_activity', user_id=user.id, note=error, date_deadline=fields.Date.today())
-            rec.message_post(body=txt)
-
+                    new_message = rec.message_post(body=message_text)
+                    record.mail_message_id = new_message.id
+            record.trigger_log_note = False if record.trigger_log_note else True
+    trigger_log_note = fields.Boolean(compute=log_note, store=True)
     def config_testing_webhook(self):
         config = self.get_config()
         developer_mode = config['developer_mode']
@@ -116,8 +162,6 @@ class WaMessageQueue(models.Model):
         }
         response = requests.post(url, data=json.dumps(payload), headers=headers)
         _logger.info("WhatsApp webhook configured: %s", response.json())
-        print(response.status_code)
-        print(response.json())
 
     def messaging_health_status(self):
         config = self.get_config()
@@ -131,8 +175,7 @@ class WaMessageQueue(models.Model):
             'Content-Type': "application/json",
         }
         response = requests.get(url, headers=headers)
-        print(response.status_code)
-        print(response.json())
+        _logger.info("WhatsApp Health Test: %s", response.json())
 
     def send_message(self, res_id, res_model, phone_number, text):
         config = self.get_config()
@@ -166,13 +209,14 @@ class WaMessageQueue(models.Model):
             'res_id': res_id,
             'res_model': res_model,
             'status_code': response.status_code,
+            'status': 'delivered' if response.status_code == 200 else 'in_progress',
             'dialog_message_id': dialog_message,
             'json_payload': payload_json,
             'json_response': json.dumps(response.json()),
-            'company_id': self.env.user.company_id.id
+            'company_id': self.env.user.company_id.id,
+            'message_content': text
         }
         wa = self.env['wa.message'].create(message_vals)
-        wa.log_note(text)
 
     def send_message_template(self, res_id, res_model, phone_number, template_id):
         config = self.get_config()
@@ -216,11 +260,12 @@ class WaMessageQueue(models.Model):
             'res_id': res_id,
             'res_model': res_model,
             'status_code': response.status_code,
+            'status': 'delivered' if response.status_code == '200' else 'in_progress',
             'dialog_message_id': dialog_message,
             'json_payload': payload_json,
             'json_response': json.dumps(response.json()),
             'company_id': self.env.user.company_id.id,
-            'wa_message_template_id': template_id.id
+            'wa_message_template_id': template_id.id,
+            'message_content': template_id.get_sending_txt(template_id.get_params_values(res_id)),
         }
         wa = self.env['wa.message'].create(message_vals)
-        wa.log_note(template_id.get_sending_txt(template_id.get_params_values(res_id)))

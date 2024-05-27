@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-        <record id="wa_message_tree_view" model="ir.ui.view">
+    <record id="wa_webhook_message_tree_view" model="ir.ui.view">
+        <field name="name">wa.webhook.message.tree.view</field>
+        <field name="model">wa.webhook.messages</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <tree string="WhatsApp WebHook Messages" sample="1" >
+                <field name="create_date" optional="show"/>
+                <field name="json_content" optional="show"/>
+            </tree>
+        </field>
+    </record>
+    <record id="whatsapp_webhook_messages" model="ir.actions.act_window">
+        <field name="name">WhatsApp Webhook Messages</field>
+        <field name="res_model">wa.webhook.messages</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No data yet !
+            </p>
+        </field>
+    </record>
+
+    <record id="wa_message_tree_view" model="ir.ui.view">
         <field name="name">wa.message.tree.view</field>
         <field name="model">wa.message</field>
         <field name="priority" eval="1"/>
@@ -11,8 +33,9 @@
                 <field name="dialog_message_id" optional="show"/>
                 <field name="res_model" optional="show"/>
                 <field name="res_id" optional="show"/>
-                <field name="status_code" optional="show"/>
+                <field name="status" optional="show"/>
                 <field name="json_response" optional="show"/>
+                <field name="mail_message_id"/>
             </tree>
         </field>
     </record>
@@ -64,9 +87,11 @@
         <field name="context">{'module' : 'whatsapp', 'bin_size': False}</field>
     </record>
 
-    <menuitem id='menu_whatsapp' name='WhatsApp' sequence="100"/>
-    <menuitem id='menu_whatsapp_messages' name='Messages' sequence="1" parent="menu_whatsapp" action="whatsapp_messages"/>
-    <menuitem id='menu_whatsapp_conf' name='Configuration' sequence="100" parent="menu_whatsapp"/>
+    <menuitem id='menu_whatsapp' name='WhatsApp' sequence="100" web_icon="odoo-whatsapp-api,static/description/whatsapplogo.jpeg"/>
+    <menuitem id='menu_whatsapp_main_messages' name='Messages' sequence="1" parent="menu_whatsapp"/>
+    <menuitem id='menu_whatsapp_messages' name='Sent Messages' sequence="1" parent="menu_whatsapp_main_messages" action="whatsapp_messages"/>
+    <menuitem id='menu_whatsapp_received_messages' name='Received Messages' sequence="1" parent="menu_whatsapp_main_messages" action="whatsapp_webhook_messages"/>
+    <menuitem id='menu_whatsapp_conf' name='Configuration' sequence="1" parent="menu_whatsapp"/>
     <menuitem id='menu_wa_conf' name='Connection Settings' sequence="1" action="action_wa_configuration" parent="menu_whatsapp_conf"/>
     <menuitem id='menu_webhook' name='Set Webhook' sequence="100" action="action_make_config_webhook" parent="menu_whatsapp_conf"/>
     <menuitem id='menu_test_health' name='Test Health' sequence="100" action="action_messaging_health_status" parent="menu_whatsapp_conf"/>

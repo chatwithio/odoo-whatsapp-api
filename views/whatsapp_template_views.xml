@@ -80,5 +80,5 @@
             </p>
         </field>
     </record>
-    <menuitem id='menu_whatsapp_message_template' name='Message Templates' sequence="1" parent="menu_whatsapp_conf" action="whatsapp_message_templates"/>
+    <menuitem id='menu_whatsapp_message_template' name='Message Templates' sequence="10" parent="menu_whatsapp_conf" action="whatsapp_message_templates"/>
 </odoo>

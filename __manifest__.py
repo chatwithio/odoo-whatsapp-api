@@ -8,7 +8,7 @@
     "support": "apelsantiago@gmail.com",
     'category': 'Mail',
     'version': '15.0.0.1.0',
-    'depends': ['mail'],
+    'depends': ['mail','crm'],
     'data': [
         'security/ir.model.access.csv',
         'views/whatsapp_views.xml',
