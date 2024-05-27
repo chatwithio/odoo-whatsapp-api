@@ -130,7 +130,10 @@ class WaMessageQueue(models.Model):
                         messages_to_process.append(json.loads(webhook_message.json_content))
                     error_message = ''
                     for message in messages_to_process:
-                        if 'statuses' in message.keys():
+                        if 'errors' in message.keys():
+                            for error in message['errors']:
+                                error_message += error['details'] + "  ||  "
+                        elif 'statuses' in message.keys():
                             for status in message['statuses']:
                                 if 'errors' in status.keys():
                                     for error in status['errors']:
