@@ -203,13 +203,19 @@ class WaMessageQueue(models.Model):
         # Send the POST request with the payload and headers
         response = requests.post(url, json=payload, headers=headers)
         dialog_message = False
+        if response.status_code == 200:
+            status = 'delivered'
+        elif '40' in str(response.status_code):
+            status = 'failed'
+        else:
+            status = 'in_progress'
         if 'messages' in response.json().keys():
             dialog_message = response.json()['messages'][0]['id']
         message_vals = {
             'res_id': res_id,
             'res_model': res_model,
             'status_code': response.status_code,
-            'status': 'delivered' if response.status_code == 200 else 'in_progress',
+            'status': status,
             'dialog_message_id': dialog_message,
             'json_payload': payload_json,
             'json_response': json.dumps(response.json()),
@@ -253,6 +259,12 @@ class WaMessageQueue(models.Model):
             'Content-Type': "application/json",
         }
         response = requests.post(url, json=payload, headers=headers)
+        if response.status_code == 200:
+            status = 'delivered'
+        elif '40' in str(response.status_code):
+            status = 'failed'
+        else:
+            status = 'in_progress'
         dialog_message = False
         if 'messages' in response.json().keys():
             dialog_message = response.json()['messages'][0]['id']
@@ -260,7 +272,7 @@ class WaMessageQueue(models.Model):
             'res_id': res_id,
             'res_model': res_model,
             'status_code': response.status_code,
-            'status': 'delivered' if response.status_code == '200' else 'in_progress',
+            'status': status,
             'dialog_message_id': dialog_message,
             'json_payload': payload_json,
             'json_response': json.dumps(response.json()),
