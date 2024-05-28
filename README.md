@@ -1,4 +1,7 @@
 # odoo-whatsapp-api
+
+This module is only for Odoo v15.
+
 <h2> Description</h2>
 Odoo WhatsApp 360 Dialog Integration. This module allows to send template messages and custom messages to customer.
 If the message fails, and activity will be created in order to correct the issue.
