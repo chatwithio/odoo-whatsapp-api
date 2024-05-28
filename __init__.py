@@ -8,6 +8,6 @@ def pre_init_check(cr):
     from odoo.exceptions import UserError
     version_info = common.exp_version()
     server_serie = version_info.get('server_serie')
-    if server_serie != '15.0':
-        raise UserError(('Module support Odoo Version 15.0 only and found ' + server_serie))
+    # -*-  if server_serie != '15.0':
+    # -*-     raise UserError(('Module support Odoo Version 15.0 only and found ' + server_serie))
     return True
