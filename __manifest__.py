@@ -7,7 +7,7 @@
     'website': '',
     "support": "apelsantiago@gmail.com",
     'category': 'Mail',
-    'version': '15.0.0.1.0',
+    'version': '15',
     'depends': ['mail','crm'],
     'data': [
         'security/ir.model.access.csv',
