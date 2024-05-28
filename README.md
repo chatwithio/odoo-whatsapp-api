@@ -1,8 +1,8 @@
 # odoo-whatsapp-api
-<h2> Description<h2/>
+<h2> Description</h2>
 Odoo WhatsApp 360 Dialog Integration. This module allows to send template messages and custom messages to customer.
 If the message fails, and activity will be created in order to correct the issue.
-<h2>Configuration<h2/>
+<h2>Configuration</h2>
 To use this module, there are some issues to consider:
 <br/>
 <br/>
@@ -37,5 +37,5 @@ To use this module, there are some issues to consider:
 --> Mail Compose Wizard: adds WhatsApp Boolean field to change the wizard functionality to send a WhatsApp Message and not an email.
 <br/>
 --> Message Post With Template: the mail templates have a configuration that links that template with a 360 Dialog Template. When a message is post with a Wa Template the mail is replaced with a WhatsApp message. This is used by the Mail Automation module.
-<h2>Technical Support<h2/>
-Developer contact: apelsantiago@gmail.com
+<h2>Technical Support</h2>
+Developer contact: info@chatwith.io
