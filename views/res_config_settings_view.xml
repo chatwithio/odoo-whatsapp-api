@@ -7,52 +7,54 @@
     <field name="priority" eval="100" />
     <field name="arch" type="xml">
         <xpath expr="//div[hasclass('settings')]" position="inside">
-            <div class="app_settings_block" data-string="whatsapp" string="WhatsApp" data-key="whatsapp" >
+            <div class="app_settings_block" data-string="whatsapp" string="WhatsApp" data-key="odoo-whatsapp-api" >
                 <h2>Connection Settings</h2>
                 <br/>
-                <div class="col-12 col-lg-6 o_setting_box" id="whatsapp">
-                    <div class="o_setting_right_pane" id="whatsapp_settings">
-                        <label for="dialog_namespace"/>
-                        <div class="text-muted">
-                            360 Dialog Namespace where WhatsApp Message Template are available
-                        </div>
-                        <div class="content-group" id="whatsapp_settings_dialog_namespace">
-                            <field name="dialog_namespace"/>
-                        </div>
-                    </div>
-                </div>
-                <br/>
-                <div class="col-12 col-lg-6 o_setting_box" id="whatsapp_1">
-                    <div class="o_setting_right_pane" id="whatsapp_settings_1">
-                        <label for="dialog_api_key"/>
-                        <div class="text-muted">
-                            360 Dialog Clien API Key
-                        </div>
-                        <div class="content-group" id="whatsapp_settings_dialog_api_key">
-                            <field name="dialog_api_key"/>
+                <div class="row mt16 o_settings_container" name="whatsapp_setting_container">
+                    <div class="col-12 col-lg-6 o_setting_box" id="whatsapp">
+                        <div class="o_setting_right_pane" id="whatsapp_settings">
+                            <label for="dialog_namespace"/>
+                            <div class="text-muted">
+                                360 Dialog Namespace where WhatsApp Message Template are available
+                            </div>
+                            <div class="content-group" id="whatsapp_settings_dialog_namespace">
+                                <field name="dialog_namespace"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-12 col-lg-6 o_setting_box" id="whatsapp_1">
-                    <div class="o_setting_right_pane" id="whatsapp_settings_2">
-                        <label for="webhook_url"/>
-                        <div class="text-muted">
-                            360 Dialog WebHook URL: only for Development
-                        </div>
-                        <div class="content-group" id="whatsapp_settings_webhook_url">
-                            <field name="webhook_url"/>
+                    <br/>
+                    <div class="col-12 col-lg-6 o_setting_box" id="whatsapp_1">
+                        <div class="o_setting_right_pane" id="whatsapp_settings_1">
+                            <label for="dialog_api_key"/>
+                            <div class="text-muted">
+                                360 Dialog Clien API Key
+                            </div>
+                            <div class="content-group" id="whatsapp_settings_dialog_api_key">
+                                <field name="dialog_api_key"/>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-6 o_setting_box" id="whatsapp_3" >
-                <div class="o_setting_left_pane">
-                    <field name="developer_mode"/>
-                </div>
-                <div class="o_setting_right_pane">
-                    <label for="developer_mode"/>
-                    <div class="text-muted">
-                        Activate Developer Mode: Changes url to Sandbox
+                    <div class="col-12 col-lg-6 o_setting_box" id="whatsapp_1">
+                        <div class="o_setting_right_pane" id="whatsapp_settings_2">
+                            <label for="webhook_url"/>
+                            <div class="text-muted">
+                                360 Dialog WebHook URL: only for Development
+                            </div>
+                            <div class="content-group" id="whatsapp_settings_webhook_url">
+                                <field name="webhook_url"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 o_setting_box" id="whatsapp_3" >
+                        <div class="o_setting_left_pane">
+                            <field name="developer_mode"/>
+                        </div>
+                        <div class="o_setting_right_pane">
+                            <label for="developer_mode"/>
+                            <div class="text-muted">
+                                Activate Developer Mode: Changes url to Sandbox
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

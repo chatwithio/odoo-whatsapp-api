@@ -42,6 +42,6 @@ class Company(models.Model):
         string="360 NameSpace",
     )
     developer_mode = fields.Boolean(
-        string="Developer Mode",
+        string="Developer Mode"
     )
 

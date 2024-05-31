@@ -2,10 +2,10 @@
 {
     'name': 'odoo-whatsapp-api',
     'summary': "360 Dialog WhatsApp Integration",
-    'description': """""",
-    'author': 'Santiago Apel',
+    'description': """Odoo Module to send WhatsApp Messages through 360 Dialog API""",
+    'author': 'ChatWithIO',
     'website': '',
-    "support": "apelsantiago@gmail.com",
+    "support": "info@chatwithio.com",
     'category': 'Mail',
     'version': '15.0',
     'depends': ['mail','crm'],

@@ -84,7 +84,7 @@
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
         <field name="target">inline</field>
-        <field name="context">{'module' : 'whatsapp', 'bin_size': False}</field>
+        <field name="context">{'module' : 'odoo-whatsapp-api', 'bin_size': False}</field>
     </record>
 
     <menuitem id='menu_whatsapp' name='WhatsApp' sequence="100" web_icon="odoo-whatsapp-api,static/description/whatsapplogo.jpeg"/>
