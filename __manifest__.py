@@ -11,6 +11,7 @@
     'depends': ['mail','crm'],
     'data': [
         'security/ir.model.access.csv',
+        'data/crm_lead_adaptation.xml',
         'views/whatsapp_views.xml',
         'views/whatsapp_adaptation_model_views.xml',
         'data/activity_type_data.xml',

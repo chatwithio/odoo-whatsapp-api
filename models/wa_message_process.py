@@ -41,7 +41,7 @@ class WaMessageModelAdaptation(models.Model):
     def get_phone_number(self, res_id=False):
         rec = self.env[self.model_name].browse(res_id)[0]
         phone = False
-        for phone_field in self.phone_field_ids.filtered(lambda x: x.relation =='res.partner'):
+        for phone_field in self.phone_field_ids.filtered(lambda x: x.relation == 'res.partner'):
             partner = rec[phone_field.name]
             if partner:
                 if partner.mobile:
@@ -101,7 +101,9 @@ class WaMessageQueue(models.Model):
         if not config:
             raise ValidationError(_("There is no model adaptation config for ") + self._name)
         for rec in active_rec:
-            user = rec[config.activity_user_field_id.name]
+            user = False
+            if config.activity_user_field_id:
+                user = rec[config.activity_user_field_id.name]
             if not user:
                 user = config.activity_default_user_id
             if not user:

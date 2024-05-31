@@ -4,8 +4,8 @@ from odoo.exceptions import ValidationError
 class MailTemplate(models.Model):
     _inherit = "mail.template"
 
-    wa_dialog_template = fields.Boolean(string="Plantilla de 360 Dialog")
-    wa_message_template_id = fields.Many2one('wa.message.template', string="Plantilla")
+    wa_dialog_template = fields.Boolean(string="360 Dialog Template")
+    wa_message_template_id = fields.Many2one('wa.message.template', string="WhatsApp Template")
 
 class MailThread(models.AbstractModel):
     """ Update MailThread to add the support of bounce management in mass mailing traces. """

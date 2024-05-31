@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record model="wa.message.model.adaptation" id="config_crm_lead">
+            <field name="model_id" eval="ref('crm.model_crm_lead')"/>
+            <field name="activity_user_field_id" eval="ref('crm.field_crm_lead__user_id')"/>
+            <field name="activity_default_user_id" eval="ref('base.user_admin')"/>
+            <field name="phone_field_ids" eval="[(4,ref('crm.field_crm_lead__partner_id')),(4,ref('crm.field_crm_lead__mobile')),(4,ref('crm.field_crm_lead__phone'))]"/>
+        </record>
+    </data>
+</odoo>
