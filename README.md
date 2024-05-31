@@ -27,10 +27,10 @@ Go to the Settings menu, select the WhatsApp section and fill the configuration 
 **API KEY**: add in the general config settings the company API-KEY. For Sandbox Api keys activate the Developer Mode. 
 <br/>
 <br/>
-**NAMESPACE**: add in the general config settings the company namespace. For developer environment use  `c8ae5f90_307a_ca4c_b8f6_d1e2a2573574`.
+**NAMESPACE** : add in the general config settings the company namespace. For developer environment use  `c8ae5f90_307a_ca4c_b8f6_d1e2a2573574`.
 <br/>
 <br/>
-**WEBHOOK ADDRESS**: the module needs the webhook connection to work properly. Every API key has its own unique WebHook configuration, so make sure it is not used for other developments. Complete the server url considering this example `https://your-odoo-domain.com`.
+**WEBHOOK ADDRESS** : the module needs the webhook connection to work properly. Every API key has its own unique WebHook configuration, so make sure it is not used for other developments. Complete the server url considering this example `https://your-odoo-domain.com`.
 The module sets the webhook url with the configured url followed by `/api/v1/whatsapp/webhook`<br/>
 For developer environment you can use free API development tools like POSTMAN requesting `http://localhost:8069/api/v1/whatsapp/webhook`
 <br/>
