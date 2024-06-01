@@ -18,7 +18,10 @@ This module allows to send messages using the development environment. Check out
 <br/>
 2. Configure module dependencies. This module allows to send messages in any model of Odoo. That means you can send WhatsApp messages in your leads, opportunities, purchases, sales, invoices or any other document you are managing. By default the WhatsApp messages are set only in the CRM module. You can change this in the `__manifest__.py` file located in the main directory.
 
- https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/dependencies_conf.png
+     ![Alt text]([https://res.cloudinary.com/demo/image/upload/sample.jpg](https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/dependencies_conf.png))
+
+ 
+ 
  
 <br/>
 3. Install the module. Start your Odoo server, go to the Apps menú and search for the module. Note: clean the search bar default filters. If the module does not appear, you can try clicking the "Update Apps List" located in the upper menu bar (with the <a href="https://www.odoo.com/documentation/17.0/applications/general/developer_mode.html#:~:text=Open%20the%20command%20palette%20by,with%20assets%20or%20deactivate%20it.&text=The%20Odoo%20Debug%20browser%20extension,Store%20and%20Firefox%20Add%2Dons." target="_blank"> odoo developer mode <a/> activated) or review in the odoo.conf the addons path. 
