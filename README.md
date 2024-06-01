@@ -53,7 +53,7 @@ For developer environment you can use free API development tools like POSTMAN re
 
  https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/connection_settings.jpeg
 
- <h4><u>Other Settings</u><h4/>
+ <h4><u>Other Settings</u></h4>
 **SET WEBHOOK**: once you complete the webhook url you have to set that connection clicking the Menu `WhatsApp > Configuration > Set Webhook`
 
 ![set_webhook](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/68649f41-0447-4fc6-921f-9bcf0f9bdfd8)
