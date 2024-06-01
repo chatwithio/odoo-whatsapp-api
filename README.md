@@ -35,7 +35,8 @@ This module allows to send messages using the development environment. Check out
 <span/>
 <h2>Configuration</h2>
 To start sending messages, there are some issues to consider after installing the module:
-<h4><u>Connection Settings</u></h4>
+
+<h4>Connection Settings</h4>
 
 Go to the Settings menu, select the WhatsApp section and fill the configuration settings.<br/>
 **API KEY**: add in the general config settings the company API-KEY. For Sandbox Api keys activate the Developer Mode. 
