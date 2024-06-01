@@ -27,6 +27,9 @@ This module allows to send messages using the development environment. Check out
 <br/>
 3. Install the module. Start your Odoo server, go to the Apps menú and search for the module. Note: clean the search bar default filters. If the module does not appear, you can try clicking the "Update Apps List" located in the upper menu bar (with the <a href="https://www.odoo.com/documentation/17.0/applications/general/developer_mode.html#:~:text=Open%20the%20command%20palette%20by,with%20assets%20or%20deactivate%20it.&text=The%20Odoo%20Debug%20browser%20extension,Store%20and%20Firefox%20Add%2Dons." target="_blank"> odoo developer mode <a/> activated) or review in the odoo.conf the addons path. 
  
+ 
+ ![install_module](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/0dae197e-e24d-40c8-bf39-6111deb8b0f0)
+
  https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/install_module.jpeg
 
 <span/>
@@ -52,6 +55,8 @@ For developer environment you can use free API development tools like POSTMAN re
  <h4><u>Other Settings</u><h4/>
 **SET WEBHOOK**: once you complete the webhook url you have to set that connection clicking the Menu `WhatsApp > Configuration > Set Webhook`
 
+![set_webhook](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/68649f41-0447-4fc6-921f-9bcf0f9bdfd8)
+
   https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/set_webhook.png
 
 <br/>
@@ -65,6 +70,8 @@ In order to send messages for a particular model, a model adaptation configurati
 → Phone Number Fields: define from witch fields contains the phone number information. You can select `res.partner` fields. If multiple fields are set, the `res.partner` fields have priority, looking first in the partner's `mobile` and if it's not set in `phone`<br/>
 By default the module has preloaded an example of configuration for `crm.lead` model:
 
+![model_adaptation](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/978df6bd-6f09-4546-a98a-4c2925d9a337)
+
 https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/model_adaptation.png
 
 <br/>
@@ -75,6 +82,8 @@ The variable params can be either custom plain text or filled with any model fie
 For developer purposes check out the <a href="https://docs.360dialog.com/docs/waba-messaging/sandbox#id-5.-send-a-template-message-optional">Sandbox available templates.<a/><br/>
 Here is an example of the `first_welcome_messsage` template:
 
+![message_template](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/7e260482-3c8a-4fe8-b1f1-7f7522919cee)
+
 https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/message_template.png
 
 <br/>
@@ -84,11 +93,15 @@ This module modifies two native Odoo features:
 → **Mail Compose Wizard**: every odoo model subscribed to the `mail` features, can send an email with the mail compose wizard.
 In this form you can find an WhatsApp Checkbox to change the functionality to send a WhatsApp Message instead an email.
 
+![send_message](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/4a046045-c174-45d0-a364-2d886d01ef08)
+
 https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/send_message.png
 
 <br/>
 → **Message Post With Template**: massive emailing can use this method to send a predefine template. The mail templates have a configuration that links that template with a 360 Dialog Template. When a message is post with a Mail Template related to a WhatsApp template the mail is replaced with a WhatsApp message. 
 This is used by the Mail Automation module.
+
+![email_template](https://github.com/chatwithio/odoo-whatsapp-api/assets/89967182/37144f97-8efa-4865-b010-d5354cb1a529)
 
 https://github.com/chatwithio/odoo-whatsapp-api/tree/main/static/description/email_template.png
 
