@@ -15,6 +15,19 @@ class MailComposeMessage(models.TransientModel):
     whatsapp_template_id = fields.Many2one('wa.message.template')
     custom_wa_text = fields.Text()
 
+    def quick_wa_open(self):
+        self.ensure_one()
+        if self.whatsapp_number.startswith(("+34", "34")):
+            url = f"https://wa.me/{self.whatsapp_number}?text={self.output_wa_text}"
+        else:
+            url = f"https://wa.me/34{self.whatsapp_number}?text={self.output_wa_text}"
+        return {
+            'type': 'ir.actions.act_url',
+            'url': url,  # Or a hardcoded URL like 'https://www.odoo.com'
+            'target': 'new',  # Opens in a new tab
+        }
+
+
     @api.onchange('whatsapp_template_id', 'whatsapp')
     def default_value_ids(self):
         vals_list = [(5,)]

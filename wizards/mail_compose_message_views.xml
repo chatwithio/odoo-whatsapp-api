@@ -39,7 +39,10 @@
             <xpath expr="//button[@name='action_save_as_template']" position="attributes">
                 <attribute name="attrs">{'invisible': [('whatsapp', '!=', False)]}</attribute>
             </xpath>
-
+            <xpath expr="//footer[last()]" position="inside">
+                <button string="Abrir WA" class="btn-primary" type="object"
+                        attrs="{'invisible': [('whatsapp', '=', False)]}" name="quick_wa_open"/>
+            </xpath>
         </field>
     </record>
 </odoo>
